@@ -1,0 +1,21 @@
+#cloud-config
+hostname: ${hostname}
+fqdn: ${hostname}.${domain}
+package_upgrade: true
+
+packages:
+  - git
+  - dnsutils
+  - open-iscsi
+
+users:
+  - name: erikwahlberger
+    plain_text_passwd: password
+    groups: sudo
+    lock_passwd: false
+    ssh_import_id:
+      - gh:Erik142
+
+runcmd:
+  - ["export", "ANSIBLE_CONFIG=~/ansible-playbooks/kubernetes-cluster/ansible.cfg"]
+  - ["ansible-pull", "-U", "https://github.com/Erik142/ansible-playbooks.git", "-i", "kubernetes-cluster/inventory/sample/hosts-${role}.ini", "-e", "master_ip=${master_ip}", -e, "{ \"control_plane_ips\": ${control_plane} }", -e, "tls_san='${tls_san}'", "-d", "~/ansible-playbooks", "kubernetes-cluster/main.yml"]
