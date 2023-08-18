@@ -287,7 +287,7 @@ resource "dns_cname_record" "control-plane" {
 resource "mikrotik_dhcp_lease" "control-plane" {
   for_each   = { for c in local.controllers : "${c.index}" => (c.index == 0 ? xenorchestra_vm.master : xenorchestra_vm.controller[c.index]) }
   address    = each.value.ipv4_addresses[0]
-  macaddress = each.value.network[0].mac_address
+  macaddress = upper(each.value.network[0].mac_address)
   comment    = "Created with Terraform"
   blocked    = "false"
   dynamic    = false
@@ -295,9 +295,8 @@ resource "mikrotik_dhcp_lease" "control-plane" {
 
 resource "mikrotik_dhcp_lease" "worker" {
   for_each   = { for c in local.workers : "${c.index}" => xenorchestra_vm.worker[c.index] }
-  hostname   = each.value.name_label
   address    = each.value.ipv4_addresses[0]
-  macaddress = each.value.network[0].mac_address
+  macaddress = upper(each.value.network[0].mac_address)
   comment    = "Created with Terraform"
   blocked    = "false"
   dynamic    = false
