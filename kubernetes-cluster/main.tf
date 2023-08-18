@@ -49,10 +49,13 @@ variable "mikrotik_config" {
 
 variable "xenorchestra_config" {
   type = object({
-    hostname = string
-    username = string
-    password = string
-    insecure = bool
+    hostname     = string
+    username     = string
+    password     = string
+    insecure     = bool
+    pool_name    = string
+    network_name = string
+    sr_name      = string
   })
 }
 
@@ -119,7 +122,7 @@ locals {
 }
 
 data "xenorchestra_pool" "pool" {
-  name_label = "Göteborg"
+  name_label = var.xenorchestra_config.pool_name
 }
 
 data "xenorchestra_template" "template" {
@@ -127,10 +130,10 @@ data "xenorchestra_template" "template" {
 }
 
 data "xenorchestra_network" "net" {
-  name_label = "Server Network"
+  name_label = var.xenorchestra_config.network_name
 }
 data "xenorchestra_sr" "storage" {
-  name_label = "Samsung Nvme 2TB"
+  name_label = var.xenorchestra_config.sr_name
 }
 
 resource "xenorchestra_cloud_config" "config_worker" {
