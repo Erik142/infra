@@ -182,6 +182,7 @@ resource "xenorchestra_vm" "controller" {
   name_description = "This VM has been created with Terraform"
   template         = data.xenorchestra_template.template.id
   wait_for_ip      = true
+  auto_poweron     = true
 
   # Prefer to run the VM on the primary pool instance
   affinity_host = data.xenorchestra_pool.pool.master
@@ -212,6 +213,7 @@ resource "xenorchestra_vm" "master" {
   name_description = "This VM has been created with Terraform"
   template         = data.xenorchestra_template.template.id
   wait_for_ip      = true
+  auto_poweron     = true
 
   # Prefer to run the VM on the primary pool instance
   affinity_host = data.xenorchestra_pool.pool.master
@@ -243,6 +245,7 @@ resource "xenorchestra_vm" "worker" {
   name_description = "This VM has been created with Terraform"
   template         = data.xenorchestra_template.template.id
   wait_for_ip      = true
+  auto_poweron     = true
 
   # Prefer to run the VM on the primary pool instance
   affinity_host = data.xenorchestra_pool.pool.master
